@@ -2,12 +2,14 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.HashMap;
 
 public class SalonesDatosMain{
+    
     public static void main(String [] args) {
         leer_archivo("DistanciasBloques.csv");
+        Estructura();
     }
-
     public static void leer_archivo(String archivo){
         BufferedReader bufferLectura = null;
         try {
@@ -35,6 +37,7 @@ public class SalonesDatosMain{
                 System.out.println();
             }
         }
+
         catch (IOException e) {
             e.printStackTrace();
         }
@@ -43,6 +46,41 @@ public class SalonesDatosMain{
             if (bufferLectura != null) {
                 try {
                     bufferLectura.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void Estructura () {
+        HashMap<String, String> academicP= new HashMap<String, String>();
+        HashMap<String, Student> estudenM= new HashMap<String, Student>();
+
+        BufferedReader bufferPa = null;
+        BufferedReader bufferAulas = null;
+        BufferedReader bufferStudents = null;
+
+        try {
+            bufferPa = new BufferedReader(new FileReader("D:/Alismos/Documentos/GitHub/Estructuras-de-datos-y-algoritmo-II/pa20192.csv"));
+            String linea = bufferPa.readLine();
+            String [] data = new String[7];
+            while (linea != null) {
+                data = linea.split(",");
+                academicP.put(data[3]+ ", " + data[4] + "," +data[5], data[0] + "," + data [1] + ", " + data[2] +","+data[6]);
+                System.out.println(data[3]+ ", " + data[4] + "," +data[5]);
+                System.out.println(academicP.get(data[3]+ ", " + data[4] + "," +data[5]));
+
+                linea = bufferPa.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (bufferPa != null) {
+                try {
+                    bufferPa.close();
                 }
                 catch (IOException e) {
                     e.printStackTrace();
