@@ -1,17 +1,20 @@
 public class Aulas {
-    private int id;
+    private String id;
     private String type;
     private int capacity;
     private int access;
 
-    public Aulas(int id, String type, int capacity, int access) {
+    public Aulas(String id, String type, int capacity, int access) {
         this.id = id;
         this.type = type;
         this.capacity = capacity;
         this.access = access;
     }
 
-    public int getId() {
+    //public Aulas(String datum, String datum1, int capacity, int access) {
+    //}
+
+    public String getId() {
         return id;
     }
 
@@ -27,9 +30,7 @@ public class Aulas {
         return access;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public void setId(String id) { this.id = id; }
 
     public void setType(String type) {
         this.type = type;

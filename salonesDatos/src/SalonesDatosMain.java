@@ -1,5 +1,5 @@
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.HashMap;
@@ -7,37 +7,41 @@ import java.util.HashMap;
 public class SalonesDatosMain{
     
     public static void main(String [] args) {
-        leer_archivo("DistanciasBloques.csv");
-        Estructura();
+	Organize();
     }
-    public static void leer_archivo(String archivo){
+
+
+    private static void Organize(){
+	 int[][] distances = new int[39][39];
+	 HashMap<String, ArrayList<String>> academicP= new HashMap<>();
+	 //HashMap<String, Student> studentsM= new HashMap<>();
+	 HashMap<Integer, Integer> access = new HashMap<>();
+	 ArrayList<Aulas> aulas = new ArrayList<>();
+	 organizarMatriz("DistanciasBloques.csv", distances);
+	 leerPa(academicP, "pa20192.csv");
+	 leerAulas(aulas, "aulas.csv");
+	 students(access, "estudiantes.csv");
+    }
+
+    private static void organizarMatriz(String file, int[][] distances){
         BufferedReader bufferLectura = null;
         try {
-            int[][] distances = new int[39][39];
             // Abrir el .csv en buffer de lectura
-            bufferLectura = new BufferedReader(new FileReader(archivo));
+            bufferLectura = new BufferedReader(new FileReader(file));
 
-            // Leer una linea del archivo
-            String linea = bufferLectura.readLine();
-            while (linea != null) {
+            // Leer una line del archivo
+            String line = bufferLectura.readLine();
+            while (line != null) {
                 // Separar la linea leída con el separador definido previamente
-                String[] campos = linea.split(",");
+                String[] campos = line.split(",");
                 //Poner en la matriz "distances" la distancia entre dos bloques, los cuales son representados
                 // con filas y columnas
                 distances[Integer.parseInt(campos[0])][Integer.parseInt(campos[1])] = Integer.parseInt(campos[2]);
                 distances[Integer.parseInt(campos[1])][Integer.parseInt(campos[0])] = Integer.parseInt(campos[2]);
-                System.out.println(campos[0]+" "+campos[1] +" "+ campos[2]);
                 // Volver a leer otra línea del fichero
-                linea = bufferLectura.readLine();
-            }
-            for(int i = 0; i < 39; i++){
-                for(int j = 0; j < 39; j++){
-                    System.out.print(distances[i][j]+ " ");
-                }
-                System.out.println();
+                line = bufferLectura.readLine();
             }
         }
-
         catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,26 +58,32 @@ public class SalonesDatosMain{
         }
     }
 
-    public static void Estructura () {
-        HashMap<String, String> academicP= new HashMap<String, String>();
-        HashMap<String, Student> estudenM= new HashMap<String, Student>();
+    private static void leerPa (HashMap<String,ArrayList<String>> academicP, String file) {
 
         BufferedReader bufferPa = null;
-        BufferedReader bufferAulas = null;
-        BufferedReader bufferStudents = null;
 
         try {
-            bufferPa = new BufferedReader(new FileReader("D:/Alismos/Documentos/GitHub/Estructuras-de-datos-y-algoritmo-II/pa20192.csv"));
-            String linea = bufferPa.readLine();
-            String [] data = new String[7];
-            while (linea != null) {
-                data = linea.split(",");
-                academicP.put(data[3]+ ", " + data[4] + "," +data[5], data[0] + "," + data [1] + ", " + data[2] +","+data[6]);
-                System.out.println(data[3]+ ", " + data[4] + "," +data[5]);
-                System.out.println(academicP.get(data[3]+ ", " + data[4] + "," +data[5]));
-
-                linea = bufferPa.readLine();
-            }
+            bufferPa = new BufferedReader(new FileReader(file));
+            String line = bufferPa.readLine();
+            while (line != null) {
+                String[] data = line.split(",");
+                //Mira si la clase tiene salon o si es un domingo, en caso de que se cumpla ignora estas clases
+                
+                if(data[6].equals("00000") || data[3].equals("domingo")){
+                //Mira si la key ya fue creada
+                    if(academicP.get(data[3]+ ", " + data[4] + "," +data[5]) == null){
+                        // Crea un arraylist y lo coloca en el valor de la nueva key, para despues agragarle el string
+                        ArrayList<String> value = new ArrayList<>();
+                        academicP.put(data[3]+ ", " + data[4] + "," +data[5], value);
+                        academicP.get(data[3]+ ", " + data[4] + "," +data[5]).add(data[0]+", "+data[1]+", "+data[2]+", "+data[6]);
+                    }else{
+                        //Agrega el string en el arraylist de la key que ya fue creada
+                        academicP.get(data[3]+ ", " + data[4] + "," +data[5]).add(data[0]+", "+data[1]+", "+data[2]+", "+data[6]);
+                    }
+                }
+                //Pasa a la siguiente linea
+                line = bufferPa.readLine();
+        }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,4 +98,58 @@ public class SalonesDatosMain{
             }
         }
     }
+    private static void leerAulas (ArrayList<Aulas> aulas, String file) {
+
+        BufferedReader studentsMa = null;
+
+        try {
+            studentsMa = new BufferedReader(new FileReader(file));
+            String line = studentsMa.readLine();
+            while (line != null) {
+                String[] data = line.split(",");
+                Aulas classroom = new Aulas(data[0],data[1],Integer.parseInt(data[2]),Integer.parseInt(data[3]));
+		        aulas.add(classroom);
+                line = studentsMa.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (studentsMa != null) {
+                try {
+                    studentsMa.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+     private static void students (HashMap<Integer, Integer> access, String file) {
+
+        BufferedReader students = null;
+
+        try {
+            students = new BufferedReader(new FileReader(file));
+            String line = students.readLine();
+            while (line != null) {
+                String [] data = line.split(",");
+                access.put(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
+                line = students.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (students != null) {
+                try {
+                    students.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+     }
 }
