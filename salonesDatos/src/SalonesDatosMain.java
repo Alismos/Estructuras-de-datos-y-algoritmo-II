@@ -13,14 +13,15 @@ public class SalonesDatosMain{
 
     private static void Organize(){
 	 int[][] distances = new int[39][39];
-	 HashMap<String, ArrayList<String>> academicP= new HashMap<>();
-	 //HashMap<String, Student> studentsM= new HashMap<>();
+	 ArrayList<Group> academicP= new ArrayList<>();
+	 HashMap<String, ArrayList<String>> studentsM= new HashMap<>();
 	 HashMap<Integer, Integer> access = new HashMap<>();
-	 ArrayList<Aulas> aulas = new ArrayList<>();
+	 HashMap<String, Aulas> aulas = new HashMap<>();
 	 organizarMatriz("DistanciasBloques.csv", distances);
 	 leerPa(academicP, "pa20192.csv");
 	 leerAulas(aulas, "aulas.csv");
-	 students(access, "estudiantes.csv");
+	 studentsReader(access, "estudiantes.csv");
+	 matReader(studentsM,"mat20192.csv");
     }
 
     private static void organizarMatriz(String file, int[][] distances){
@@ -58,7 +59,7 @@ public class SalonesDatosMain{
         }
     }
 
-    private static void leerPa (HashMap<String,ArrayList<String>> academicP, String file) {
+    private static void leerPa (ArrayList<Group> academicP, String file) {
 
         BufferedReader bufferPa = null;
 
@@ -66,19 +67,19 @@ public class SalonesDatosMain{
             bufferPa = new BufferedReader(new FileReader(file));
             String line = bufferPa.readLine();
             while (line != null) {
-                String[] data = line.split(",");
+                String[] data;
+                data = line.split(",");
                 //Mira si la clase tiene salon o si es un domingo, en caso de que se cumpla ignora estas clases
-                
-                if(data[6].equals("00000") || data[3].equals("domingo")){
-                //Mira si la key ya fue creada
-                    if(academicP.get(data[3]+ ", " + data[4] + "," +data[5]) == null){
-                        // Crea un arraylist y lo coloca en el valor de la nueva key, para despues agragarle el string
-                        ArrayList<String> value = new ArrayList<>();
-                        academicP.put(data[3]+ ", " + data[4] + "," +data[5], value);
-                        academicP.get(data[3]+ ", " + data[4] + "," +data[5]).add(data[0]+", "+data[1]+", "+data[2]+", "+data[6]);
-                    }else{
-                        //Agrega el string en el arraylist de la key que ya fue creada
-                        academicP.get(data[3]+ ", " + data[4] + "," +data[5]).add(data[0]+", "+data[1]+", "+data[2]+", "+data[6]);
+                if(data.length == 7) {
+                    if(data[6].equals("00000") || data[3].equals("domingo")) {
+                        if(data[4].equals("lunes") || data[4].equals("martes") || data[4].equals("miercoles") || data[4].equals("jueves")
+                                || data[4].equals("viernes") || data[4].equals("sabado")) {
+                            String[] hi = data[4].split(":");
+                            String[] hf = data[5].split(":");
+                            Group group = new Group(data[0] + "," + data[1], Integer.parseInt(data[2]), data[3], Integer.parseInt(hi[0]+hi[1])
+                                    , Integer.parseInt(hf[0]+hf[1]), Integer.parseInt(data[6]));
+                            academicP.add(group);
+                        }
                     }
                 }
                 //Pasa a la siguiente linea
@@ -98,7 +99,7 @@ public class SalonesDatosMain{
             }
         }
     }
-    private static void leerAulas (ArrayList<Aulas> aulas, String file) {
+    private static void leerAulas (HashMap<String, Aulas> aulas, String file) {
 
         BufferedReader studentsMa = null;
 
@@ -107,8 +108,13 @@ public class SalonesDatosMain{
             String line = studentsMa.readLine();
             while (line != null) {
                 String[] data = line.split(",");
-                Aulas classroom = new Aulas(data[0],data[1],Integer.parseInt(data[2]),Integer.parseInt(data[3]));
-		        aulas.add(classroom);
+                if(data.length == 4){
+                    if(data[2].equals("N/A")){
+                        data[2] = "1000";
+                    }
+                    Aulas classroom = new Aulas(data[1],Integer.parseInt(data[2]),Integer.parseInt(data[3]));
+                    aulas.put(data[0], classroom);
+                }
                 line = studentsMa.readLine();
             }
         } catch (IOException e) {
@@ -126,7 +132,7 @@ public class SalonesDatosMain{
         }
     }
 
-     private static void students (HashMap<Integer, Integer> access, String file) {
+     private static void studentsReader (HashMap<Integer, Integer> access, String file) {
 
         BufferedReader students = null;
 
@@ -152,4 +158,36 @@ public class SalonesDatosMain{
             }
         }
      }
+    private static void matReader (HashMap<String, ArrayList<String>> studentsM, String file) {
+
+        BufferedReader mats = null;
+
+        try {
+            mats = new BufferedReader(new FileReader(file));
+            String line = mats.readLine();
+            while (line != null) {
+                String [] data = line.split(",");
+                if(studentsM.get(data[1]+ ", " + data[2]) == null){
+                    ArrayList<String> sts = new ArrayList<>();
+                    studentsM.put(data[1]+ ", " + data[2], sts);
+                    studentsM.get(data[1]+ ", " + data[2]).add(data[0]);
+                }else{
+                    studentsM.get(data[1]+","+data[2]).add(data[0]);
+                }
+                line = mats.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (mats != null) {
+                try {
+                    mats.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

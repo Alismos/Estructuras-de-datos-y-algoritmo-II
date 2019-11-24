@@ -1,25 +1,33 @@
 public class Student {
-    private int name;
-    private byte haveD;
+    private int id;
+    private String subject;
+    private String group;
 
-    public Student(int name, byte haveD) {
-        this.name = name;
-        this.haveD = haveD;
+    public Student(int id, String subject, String group) {
+        this.id = id;
+        this.subject = subject;
+        this.group = group;
     }
 
-    public int getName() {
-        return name;
+    public int getId() {
+        return id;
     }
 
-    public byte getHaveD() {
-        return haveD;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setName(int name) {
-        this.name = name;
+    public String getGroup() {
+        return group;
     }
 
-    public void setHaveD(byte haveD) {
-        this.haveD = haveD;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setSubject(String subject) { this.subject = subject; }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 }
