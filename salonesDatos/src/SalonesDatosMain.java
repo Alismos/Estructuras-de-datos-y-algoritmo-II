@@ -12,7 +12,7 @@ public class SalonesDatosMain{
 
 
     private static void Organize(){
-	 int[][] distances = new int[39][39];
+	 int[][] distances = new int[40][40];
 	 ArrayList<Group> academicP= new ArrayList<>();
 	 HashMap<String, ArrayList<String>> studentsM= new HashMap<>();
 	 HashMap<Integer, Integer> access = new HashMap<>();
@@ -71,20 +71,17 @@ public class SalonesDatosMain{
                 data = line.split(",");
                 //Mira si la clase tiene salon o si es un domingo, en caso de que se cumpla ignora estas clases
                 if(data.length == 7) {
-                    if(data[6].equals("00000") || data[3].equals("domingo")) {
-                        if(data[4].equals("lunes") || data[4].equals("martes") || data[4].equals("miercoles") || data[4].equals("jueves")
-                                || data[4].equals("viernes") || data[4].equals("sabado")) {
+                    if(!(data[6].equals("00000")) || !(data[3].equals("domingo"))) {
                             String[] hi = data[4].split(":");
                             String[] hf = data[5].split(":");
                             Group group = new Group(data[0] + "," + data[1], Integer.parseInt(data[2]), data[3], Integer.parseInt(hi[0]+hi[1])
-                                    , Integer.parseInt(hf[0]+hf[1]), Integer.parseInt(data[6]));
+                                    , Integer.parseInt(hf[0]+hf[1]), data[6]);
                             academicP.add(group);
                         }
                     }
                 }
                 //Pasa a la siguiente linea
                 line = bufferPa.readLine();
-        }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -167,12 +164,12 @@ public class SalonesDatosMain{
             String line = mats.readLine();
             while (line != null) {
                 String [] data = line.split(",");
-                if(studentsM.get(data[1]+ ", " + data[2]) == null){
-                    ArrayList<String> sts = new ArrayList<>();
-                    studentsM.put(data[1]+ ", " + data[2], sts);
-                    studentsM.get(data[1]+ ", " + data[2]).add(data[0]);
-                }else{
+                if(studentsM.containsKey(data[1]+ ", " + data[2])){
                     studentsM.get(data[1]+","+data[2]).add(data[0]);
+                }else{
+                    ArrayList<String> sts = new ArrayList<>();
+                    sts.add(data[0]);
+                    studentsM.put(data[1]+ ", " + data[2], sts);
                 }
                 line = mats.readLine();
             }

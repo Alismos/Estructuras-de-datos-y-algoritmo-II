@@ -4,9 +4,9 @@ public class Group {
     private  String day;
     private int sh; // starting hour
     private int fh; // finishing hour
-    private int cr; // class room = aula
+    private String cr; // class room = aula
 
-    public Group(String sg, int professor,String day, int sh, int fh, int cr) {
+    public Group(String sg, int professor,String day, int sh, int fh, String cr) {
         this.sg = sg;
         this.professor = professor;
         this.day = day;
@@ -35,7 +35,7 @@ public class Group {
         return fh;
     }
 
-    public int getCr() { return cr; }
+    public String getCr() { return cr; }
 
     public void setSg(String sg) {
         this.sg = sg;
@@ -57,5 +57,5 @@ public class Group {
         this.fh = fh;
     }
 
-    public void setCr(int cr) { this.cr = cr; }
+    public void setCr(String cr) { this.cr = cr; }
 }
