@@ -1,23 +1,17 @@
 public class Aulas {
-    //private String id;
-    private String type;
-    private int capacity;
-    private int access;
 
-    public Aulas(/*String id,*/ String type, int capacity, int access) {
-        //this.id = id;
+    private String type; // Means the type of classRoom the class is
+    private int capacity; // Means the capacity of people that the room can have
+    private int access; // Means if the classroom has an easy access for disable people
+
+    // Constructor of the object
+    public Aulas(String type, int capacity, int access) {
         this.type = type;
         this.capacity = capacity;
         this.access = access;
     }
 
-    //public Aulas(String datum, String datum1, int capacity, int access) {
-    //}
-
-   /* public String getId() {
-        return id;
-    }*/
-
+    // Methods that return the information you are asking for
     public String getType() {
         return type;
     }
@@ -30,8 +24,7 @@ public class Aulas {
         return access;
     }
 
-    //public void setId(String id) { this.id = id; }
-
+    // Methods that change the values of the attributes of the object
     public void setType(String type) {
         this.type = type;
     }

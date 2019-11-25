@@ -1,6 +1,6 @@
 public class Student {
-    private int id;
-    private String subject;
+    private int id; // Means the number that represents each student
+    private String subject; //
     private String group;
 
     public Student(int id, String subject, String group) {
