@@ -1,8 +1,9 @@
+import sun.java2d.loops.GeneralRenderer;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Date;
 import java.util.HashMap;
 
 public class SalonesDatosMain{
@@ -31,6 +32,10 @@ public class SalonesDatosMain{
     private static void leerDias(ArrayList<Group>[] Days, HashMap<String, ArrayList<Integer>> sgStudent,HashMap<Integer, ArrayList<String>> studentSG,
                                  HashMap<Integer, Integer> access, HashMap<String, Aulas> aulas, int[][] distances){
 
+        for (int i = 0; i<Days.length; i++){
+            Days[i] = organizeD(Days[i], 0, Days[i].size());
+        }
+
         int d;
         //Dias de la semana
         for (int i = 0; i < Days.length; i++){
@@ -44,6 +49,70 @@ public class SalonesDatosMain{
                     }
                 }
             }
+        }
+    }
+
+    private static ArrayList<Group> organizeD(ArrayList<Group> Groups, int l, int r){
+        if (l < r){
+            int m = (l+r)/2;
+
+            organizeD(Groups, l, m);
+            organizeD(Groups, m+1, r);
+
+            merge(Groups,l,m,r);
+        }
+
+        return Groups;
+    }
+
+    private static void merge(ArrayList<Group> Groups, int l, int m, int r){
+        int n1 = m - l + 1;
+        int n2 = r - m;
+
+        /* Create temp arrays */
+        Group L[] = new Group [n1];
+        Group R[] = new Group [n2];
+
+        /*Copy data to temp arrays*/
+        for (int i=0; i<n1; ++i)
+            L[i] = Groups.get(l+i);
+        for (int j=0; j<n2; ++j)
+            R[j] = Groups.get(m + 1+ j);
+
+
+        int i = 0, j = 0;
+
+        // Initial index of merged subarry array
+        int k = l;
+        while (i < n1 && j < n2)
+        {
+            if (L[i].getSh() <= R[j].getSh())
+            {
+                Groups.add(k,L[i]);
+                i++;
+            }
+            else
+            {
+                Groups.add(k, R[j]);
+                j++;
+            }
+            k++;
+        }
+
+        /* Copy remaining elements of L[] if any */
+        while (i < n1)
+        {
+            Groups.add(k,L[i]);
+            i++;
+            k++;
+        }
+
+        /* Copy remaining elements of R[] if any */
+        while (j < n2)
+        {
+            Groups.add(k,R[j]);
+            j++;
+            k++;
         }
     }
 
