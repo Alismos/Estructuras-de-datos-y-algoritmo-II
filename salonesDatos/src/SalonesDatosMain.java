@@ -2,24 +2,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.Date;
 import java.util.HashMap;
 
 public class SalonesDatosMain{
-    
+
     public static void main(String [] args) {
-	Organize();
+        Organize();
     }
 
 
     private static void Organize(){
         int[][] distances = new int[40][40];
-        ArrayList<Group>[] Days = new ArrayList[7];
+        ArrayList<Group>[] Days = new ArrayList[6];
         HashMap<String, ArrayList<Integer>> sgStudent = new HashMap<>();
         HashMap<Integer, ArrayList<String>> studentSG = new HashMap<>();
         HashMap<Integer, Integer> access = new HashMap<>();
         HashMap<String, Aulas> aulas = new HashMap<>();
         organizarMatriz("DistanciasBloques.csv", distances);
-        leerPa(Days, "pa20192.csv");
+        Days = leerPa(Days, "pa20192.csv");
         matReader(sgStudent,"mat20192.csv", studentSG);
         leerAulas(aulas, "aulas.csv");
         studentsReader(access, "estudiantes.csv");
@@ -36,13 +37,10 @@ public class SalonesDatosMain{
             // Grupos de cada día
             for (int j = 0; j < Days[i].size(); j++){
                 //Estudiantes de cada grupo
-                for (int k = 0; k < sgStudent.size(); k++){
-                    if(sgStudent.containsKey(Days[i].get(j).getSg())){
-                            d =  getNextClass(Days[i], sgStudent.get(Days[i].get(j).getSg()).get(k), Days[i].get(j).getFh()
-                            , Days[i].get(j).getCr(), studentSG, distances);
-                        System.out.println(d);
-                    } else{
-                        break;
+                if(sgStudent.containsKey(Days[i].get(j).getSg())){
+                    for (int k = 0; k < sgStudent.get(Days[i].get(j).getSg()).size(); k++) {
+                        d = getNextClass(Days[i], sgStudent.get(Days[i].get(j).getSg()).get(k), Days[i].get(j).getFh()
+                                , Days[i].get(j).getCr(), studentSG, distances);
                     }
                 }
             }
@@ -50,17 +48,19 @@ public class SalonesDatosMain{
     }
 
     private static int getNextClass(ArrayList<Group> classes, int student, int FH, String aClassroom,
-                                     HashMap<Integer, ArrayList<String>> studentSG, int[][] distances){
+                                    HashMap<Integer, ArrayList<String>> studentSG, int[][] distances){
         ArrayList<String> c = studentSG.get(student);
+
         int d = 0;
         if(c.size()>1) {
             for (int i = 0; i < c.size(); i++) {
                 for (int j = 0; j < classes.size(); j++) {
-                    if (c.get(i).equals(classes.get(j).getSg()) && FH == classes.get(j).getSh()) {
+                    if (FH == classes.get(j).getSh() && c.contains(classes.get(j).getSg())) {
                         System.out.println(student);
-                        System.out.println(c.get(i) + "- CON -" + classes.get(j).getSg());
-                        System.out.println("-------------------------------------------");
+                        System.out.println(c.get(i) + " CON " + classes.get(j).getSg());
                         d = calculateDistance(distances, aClassroom, classes.get(j).getCr());
+                        System.out.println(d);
+                        System.out.println("-------------------------------------------");
                         // Need to change the value of i so we can break the two cycles
                         i = c.size();
                         break;
@@ -72,9 +72,11 @@ public class SalonesDatosMain{
     }
 
     private static int calculateDistance(int[][] distances, String aClassroom, String fClassroom){
+
         String s1, s2;
         int b1, b2;
         int d = 0;
+
         if(aClassroom.length() == 4 && fClassroom.length() == 4){
             s1 = aClassroom.substring(0,1);
             s2 = fClassroom.substring(0,1);
@@ -140,10 +142,10 @@ public class SalonesDatosMain{
         }
     }
 
-    private static void leerPa (ArrayList<Group>[] Days, String file) {
+    private static ArrayList<Group>[] leerPa (ArrayList<Group>[] Days, String file) {
 
         BufferedReader bufferPa = null;
-        for (int i = 0; i < 6; i++){
+        for (int i = 0; i < Days.length; i++){
             Days[i] = new ArrayList<Group>();
         }
 
@@ -209,6 +211,7 @@ public class SalonesDatosMain{
                 }
             }
         }
+        return Days;
     }
     private static void leerAulas (HashMap<String, Aulas> aulas, String file) {
 
@@ -243,7 +246,7 @@ public class SalonesDatosMain{
         }
     }
 
-     private static void studentsReader (HashMap<Integer, Integer> access, String file) {
+    private static void studentsReader (HashMap<Integer, Integer> access, String file) {
 
         BufferedReader students = null;
 
@@ -268,7 +271,7 @@ public class SalonesDatosMain{
                 }
             }
         }
-     }
+    }
     private static void matReader (HashMap<String, ArrayList<Integer>> sgS, String file, HashMap<Integer, ArrayList<String>> sSG) {
 
         BufferedReader mats = null;

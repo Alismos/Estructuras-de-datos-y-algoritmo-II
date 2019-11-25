@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="983837cf-1973-40b8-beb5-e535e1eb668c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Group.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Group.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/SalonesDatosMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/SalonesDatosMain.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -20,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/SalonesDatosMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="73">
-              <caret line="57" selection-start-line="57" selection-end-line="57" />
+            <state relative-caret-position="130">
+              <caret line="38" selection-start-line="38" selection-end-line="38" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#221#222#0" expanded="true" />
@@ -103,11 +101,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2" />
-    <option name="y" value="23" />
-    <option name="width" value="1295" />
-    <option name="height" value="877" />
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="width" value="1440" />
+    <option name="height" value="900" />
   </component>
   <component name="ProjectId" id="1TsxaYGABYH22A3ZwSTXQAXFN8C" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -182,7 +178,7 @@
       <workItem from="1574369977545" duration="6097000" />
       <workItem from="1574444763659" duration="242000" />
       <workItem from="1574539211511" duration="14966000" />
-      <workItem from="1574610751291" duration="22521000" />
+      <workItem from="1574610751291" duration="24890000" />
     </task>
     <task id="LOCAL-00001" summary="&quot;Lectura de datos, leyendo matricula NullPointerException&quot;">
       <created>1574568090445</created>
@@ -191,11 +187,18 @@
       <option name="project" value="LOCAL" />
       <updated>1574568090445</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="&quot;Maldita sea la vida&quot;">
+      <created>1574640571195</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1574640571195</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="43826000" />
+    <option name="totallyTimeSpent" value="46195000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="2" y="23" width="1438" height="877" extended-state="6" />
@@ -210,8 +213,8 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.4420382" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.21528663" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.19617835" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.21528663" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -302,19 +305,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="&quot;Lectura de datos, leyendo matricula NullPointerException&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="&quot;Lectura de datos, leyendo matricula NullPointerException&quot;" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/SalonesDatosMain.java</url>
-          <line>40</line>
-          <properties />
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="&quot;Maldita sea la vida&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;Maldita sea la vida&quot;" />
   </component>
   <component name="editorHistoryManager">
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_201.jdk/Contents/Home/src.zip!/java/lang/NumberFormatException.java">
@@ -363,8 +355,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/SalonesDatosMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="73">
-          <caret line="57" selection-start-line="57" selection-end-line="57" />
+        <state relative-caret-position="130">
+          <caret line="38" selection-start-line="38" selection-end-line="38" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#221#222#0" expanded="true" />
