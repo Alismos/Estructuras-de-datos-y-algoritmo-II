@@ -1,5 +1,5 @@
-/*
-* Authors: Andrés Darío Chaves Pérez and Duvan Andrés Ramirez Saedra
+/**
+* @Authors: Andrés Darío Chaves Pérez and Duvan Andrés Ramirez Saedra
 * Last update: 5:23am 25/11/2019
 *
 * */
