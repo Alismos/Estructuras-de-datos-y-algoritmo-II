@@ -1,6 +1,8 @@
-import sun.java2d.loops.GeneralRenderer;
-
-import java.awt.image.AreaAveragingScaleFilter;
+/*
+* Authors: Andrés Darío Chaves Pérez and Duvan Andrés Ramirez Saedra
+* Last update: 5:23am 25/11/2019
+*
+* */
 import java.io.IOException;
 import java.util.ArrayList;
 import java.io.BufferedReader;
