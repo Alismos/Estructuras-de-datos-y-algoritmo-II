@@ -1,5 +1,5 @@
 public class Group {
-    private String sg; // SubjectGroup
+    private String sg; // Subject,Group
     private int professor;
     private  String day;
     private int sh; // starting hour

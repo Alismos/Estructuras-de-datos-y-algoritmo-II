@@ -12,16 +12,97 @@ public class SalonesDatosMain{
 
 
     private static void Organize(){
-	 int[][] distances = new int[40][40];
-	 ArrayList<Group> academicP= new ArrayList<>();
-	 HashMap<String, ArrayList<String>> studentsM= new HashMap<>();
-	 HashMap<Integer, Integer> access = new HashMap<>();
-	 HashMap<String, Aulas> aulas = new HashMap<>();
-	 organizarMatriz("DistanciasBloques.csv", distances);
-	 leerPa(academicP, "pa20192.csv");
-	 leerAulas(aulas, "aulas.csv");
-	 studentsReader(access, "estudiantes.csv");
-	 matReader(studentsM,"mat20192.csv");
+        int[][] distances = new int[40][40];
+        ArrayList<Group>[] Days = new ArrayList[7];
+        HashMap<String, ArrayList<Integer>> sgStudent = new HashMap<>();
+        HashMap<Integer, ArrayList<String>> studentSG = new HashMap<>();
+        HashMap<Integer, Integer> access = new HashMap<>();
+        HashMap<String, Aulas> aulas = new HashMap<>();
+        organizarMatriz("DistanciasBloques.csv", distances);
+        leerPa(Days, "pa20192.csv");
+        matReader(sgStudent,"mat20192.csv", studentSG);
+        leerAulas(aulas, "aulas.csv");
+        studentsReader(access, "estudiantes.csv");
+
+        leerDias(Days, sgStudent, studentSG, access, aulas, distances);
+    }
+
+    private static void leerDias(ArrayList<Group>[] Days, HashMap<String, ArrayList<Integer>> sgStudent,HashMap<Integer, ArrayList<String>> studentSG,
+                                 HashMap<Integer, Integer> access, HashMap<String, Aulas> aulas, int[][] distances){
+
+        int d;
+        //Dias de la semana
+        for (int i = 0; i < Days.length; i++){
+            // Grupos de cada día
+            for (int j = 0; j < Days[i].size(); j++){
+                //Estudiantes de cada grupo
+                for (int k = 0; k < sgStudent.size(); k++){
+                    if(sgStudent.containsKey(Days[i].get(j).getSg())){
+                            d =  getNextClass(Days[i], sgStudent.get(Days[i].get(j).getSg()).get(k), Days[i].get(j).getFh()
+                            , Days[i].get(j).getCr(), studentSG, distances);
+                        System.out.println(d);
+                    } else{
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private static int getNextClass(ArrayList<Group> classes, int student, int FH, String aClassroom,
+                                     HashMap<Integer, ArrayList<String>> studentSG, int[][] distances){
+        ArrayList<String> c = studentSG.get(student);
+        int d = 0;
+        if(c.size()>1) {
+            for (int i = 0; i < c.size(); i++) {
+                for (int j = 0; j < classes.size(); j++) {
+                    if (c.get(i).equals(classes.get(j).getSg()) && FH == classes.get(j).getSh()) {
+                        System.out.println(student);
+                        System.out.println(c.get(i) + "- CON -" + classes.get(j).getSg());
+                        System.out.println("-------------------------------------------");
+                        d = calculateDistance(distances, aClassroom, classes.get(j).getCr());
+                        // Need to change the value of i so we can break the two cycles
+                        i = c.size();
+                        break;
+                    }
+                }
+            }
+        }
+        return d;
+    }
+
+    private static int calculateDistance(int[][] distances, String aClassroom, String fClassroom){
+        String s1, s2;
+        int b1, b2;
+        int d = 0;
+        if(aClassroom.length() == 4 && fClassroom.length() == 4){
+            s1 = aClassroom.substring(0,1);
+            s2 = fClassroom.substring(0,1);
+            b1 = Integer.parseInt(s1);
+            b2 = Integer.parseInt(s2);
+            d = distances[b1][b2];
+        } else if(aClassroom.length() == 4 && fClassroom.length() == 5){
+            s1 = aClassroom.substring(0,1);
+            s2 = fClassroom.substring(0,2);
+            b1 = Integer.parseInt(s1);
+            b2 = Integer.parseInt(s2);
+            d = distances[b1][b2];
+
+        } else if(aClassroom.length() == 5 && fClassroom.length() == 4){
+            s1 = aClassroom.substring(0,2);
+            s2 = fClassroom.substring(0,1);
+            b1 = Integer.parseInt(s1);
+            b2 = Integer.parseInt(s2);
+            d = distances[b1][b2];
+
+        } else {
+            s1 = aClassroom.substring(0,2);
+            s2 = fClassroom.substring(0,2);
+            b1 = Integer.parseInt(s1);
+            b2 = Integer.parseInt(s2);
+            d = distances[b1][b2];
+        }
+        return d;
     }
 
     private static void organizarMatriz(String file, int[][] distances){
@@ -59,9 +140,12 @@ public class SalonesDatosMain{
         }
     }
 
-    private static void leerPa (ArrayList<Group> academicP, String file) {
+    private static void leerPa (ArrayList<Group>[] Days, String file) {
 
         BufferedReader bufferPa = null;
+        for (int i = 0; i < 6; i++){
+            Days[i] = new ArrayList<Group>();
+        }
 
         try {
             bufferPa = new BufferedReader(new FileReader(file));
@@ -70,18 +154,48 @@ public class SalonesDatosMain{
                 String[] data;
                 data = line.split(",");
                 //Mira si la clase tiene salon o si es un domingo, en caso de que se cumpla ignora estas clases
-                if(data.length == 7) {
-                    if(!(data[6].equals("00000")) || !(data[3].equals("domingo"))) {
-                            String[] hi = data[4].split(":");
-                            String[] hf = data[5].split(":");
-                            Group group = new Group(data[0] + "," + data[1], Integer.parseInt(data[2]), data[3], Integer.parseInt(hi[0]+hi[1])
-                                    , Integer.parseInt(hf[0]+hf[1]), data[6]);
-                            academicP.add(group);
+                if (data.length == 7) {
+                    if (data[6].equals("00000") || data[3].equals("domingo")) {
+                    } else {
+                        String[] hi = data[4].split(":");
+                        String[] hf = data[5].split(":");
+                        switch(data[3]){
+                            case "lunes":
+                                Group groups0 = new Group(data[0] + "," + data[1], Integer.parseInt(data[2]), data[3], Integer.parseInt(hi[0] + hi[1])
+                                        , Integer.parseInt(hf[0] + hf[1]), data[6]);
+                                Days[0].add(groups0);
+                                break;
+                            case "martes":
+                                Group groups1 = new Group(data[0] + "," + data[1], Integer.parseInt(data[2]), data[3], Integer.parseInt(hi[0] + hi[1])
+                                        , Integer.parseInt(hf[0] + hf[1]), data[6]);
+                                Days[1].add(groups1);
+                                break;
+                            case "miércoles":
+                                Group groups2 = new Group(data[0] + "," + data[1], Integer.parseInt(data[2]), data[3], Integer.parseInt(hi[0] + hi[1])
+                                        , Integer.parseInt(hf[0] + hf[1]), data[6]);
+                                Days[2].add(groups2);
+                                break;
+                            case "jueves":
+                                Group groups3 = new Group(data[0] + "," + data[1], Integer.parseInt(data[2]), data[3], Integer.parseInt(hi[0] + hi[1])
+                                        , Integer.parseInt(hf[0] + hf[1]), data[6]);
+                                Days[3].add(groups3);
+                                break;
+                            case "viernes":
+                                Group groups4 = new Group(data[0] + "," + data[1], Integer.parseInt(data[2]), data[3], Integer.parseInt(hi[0] + hi[1])
+                                        , Integer.parseInt(hf[0] + hf[1]), data[6]);
+                                Days[4].add(groups4);
+                                break;
+                            case "sábado":
+                                Group groups5 = new Group(data[0] + "," + data[1], Integer.parseInt(data[2]), data[3], Integer.parseInt(hi[0] + hi[1])
+                                        , Integer.parseInt(hf[0] + hf[1]), data[6]);
+                                Days[5].add(groups5);
+                                break;
                         }
                     }
                 }
                 //Pasa a la siguiente linea
                 line = bufferPa.readLine();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -155,7 +269,7 @@ public class SalonesDatosMain{
             }
         }
      }
-    private static void matReader (HashMap<String, ArrayList<String>> studentsM, String file) {
+    private static void matReader (HashMap<String, ArrayList<Integer>> sgS, String file, HashMap<Integer, ArrayList<String>> sSG) {
 
         BufferedReader mats = null;
 
@@ -164,12 +278,21 @@ public class SalonesDatosMain{
             String line = mats.readLine();
             while (line != null) {
                 String [] data = line.split(",");
-                if(studentsM.containsKey(data[1]+ ", " + data[2])){
-                    studentsM.get(data[1]+","+data[2]).add(data[0]);
+                //Adding to the HashMap sgS, key: String concatenated (subject and group) value: ArrayList of Integer(Student)
+                if(sgS.containsKey(data[1]+ "," + data[2])){
+                    sgS.get(data[1]+","+data[2]).add(Integer.parseInt(data[0]));
+                }else{
+                    ArrayList<Integer> sts = new ArrayList<>();
+                    sts.add(Integer.parseInt(data[0]));
+                    sgS.put(data[1]+ "," + data[2], sts);
+                }
+                //Adding to the HashMap sSG, key: Student and value: ArrayList of Strings concatenated(subject and group)
+                if(sSG.containsKey(Integer.parseInt(data[0]))){
+                    sSG.get(Integer.parseInt(data[0])).add(data[1]+","+data[2]);
                 }else{
                     ArrayList<String> sts = new ArrayList<>();
-                    sts.add(data[0]);
-                    studentsM.put(data[1]+ ", " + data[2], sts);
+                    sts.add(data[1]+","+data[2]);
+                    sSG.put(Integer.parseInt(data[0]), sts);
                 }
                 line = mats.readLine();
             }
